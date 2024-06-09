@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bussily - Velur Bus Routes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap">
+    <link rel="icon" type="image/png" href="./images/icon.png">
+    <style>
+        /* Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* General Styles */
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            opacity: 0.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Route Selection Styles */
+        .route-selection {
+            text-align: center;
+            margin-bottom: 50px; /* Increased bottom margin for better spacing */
+        }
+
+        .route-selection h1 {
+            font-size: 2.5rem; /* Increased font size for emphasis */
+            margin-bottom: 1rem;
+            color: #6200ea;
+        }
+
+        .route-selection h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .route {
+            margin-bottom: 20px; /* Increased bottom margin for better spacing */
+        }
+
+        .route a {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #292929;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .route a:hover {
+            transform: scale(1.05);
+        }
+
+        /* Footer Styles */
+        .footer {
+            margin-top: auto; /* Push the footer to the bottom */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 20px; /* Added padding for spacing */
+            padding-bottom: 20px; /* Added padding for spacing */
+            width: 100%;
+            background-color: #121212;
+            color: #fff;
+            font-size: 1rem; /* Decreased font size for better proportion */
+        }
+
+        .footer-text {
+            margin-right: 5px;
+        }
+
+        /* Report Button Styles */
+        .report-btn {
+            display: inline-block;
+            background-color: #6200ea;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .report-btn:hover {
+            background-color: #4d0099;
+        }
+    </style>
+</head>
+<body>
+    <div class="container route-selection">
+        <h1>Bussily - Velur Bus Routes</h1>
+        <h2>Select Route</h2>
+        <div class="route">
+            <a href="./routes/kcy-wky.html">Kechery to Vadakanchery</a>
+        </div>
+        <div class="route">
+            <a href="./routes/wky-kcy.html">Vadakanchery to Kechery</a>
+        </div>
+        <div class="route">
+            <a href="./routes/kcy-tcr.html">Kechery to Thrissur</a>
+        </div>
+    </div>
+    
+    <!-- Report Button -->
+    <a href="https://api.whatsapp.com/send?phone=+918848365840&text=Name:%0AProblem:%0A" class="report-btn">Report a Problem</a>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p class="footer-text">Made with ❤️ by Agnel Francis</p>
+    </div>
+</body>
+</html>

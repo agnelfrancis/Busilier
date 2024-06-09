@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bussily - Kechery to Vadakanchery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap">
+    <link rel="icon" type="image/png" href="../images/icon.png">
+    <style>
+        /* Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* General Styles */
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            opacity: 0.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Button Styles */
+        .button {
+            background-color: #6200ea;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #4b0082;
+            transform: scale(1.05);
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: #6200ea;
+            padding: 20px;
+        }
+
+        .navbar a {
+            margin: 0 20px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .navbar a:hover {
+            opacity: 0.7;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-top: 80px;
+            text-align: center;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #6200ea;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Schedule Styles */
+        .schedule {
+            width: 100%;
+            max-width: 500px;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .bus {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .bus:last-child {
+            border-bottom: none;
+        }
+
+        .bus.via-vazhani {
+            color: #ff9800;
+        }
+
+        .bus-time, .remaining-time, .destination {
+            font-size: 1rem;
+        }
+
+        .remaining-time {
+            font-weight: bold;
+        }
+
+        /* Next Bus Styles */
+        .next-bus {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #292929;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .next-bus .remaining-time {
+            font-size: 1.5rem;
+        }
+
+        .via-vazhani::after {
+            content: ' (via Vazhani)';
+        }
+    </style>
+</head>
+<body>
+    <h1>Bussily</h1>
+    <h2>Kechery to Vadakanchery</h2>
+    <div class="next-bus" id="nextBus">
+        <!-- Next arriving bus will be shown here -->
+    </div>
+    <div class="schedule" id="schedule">
+        <!-- Next four bus times will be dynamically inserted here -->
+    </div>
+
+    <button class="button" onclick="redirectToFullTimeTable()">View Full Time Table</button>
+    <script>
+        const busTimes = [
+            { time: "05:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "05:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "05:15", destination: "Vadakanchery", viaVazhani: false },
+            { time: "05:45", destination: "Vadakanchery", viaVazhani: false },
+            { time: "05:55", destination: "Vadakanchery", viaVazhani: true },
+            { time: "06:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "06:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "06:25", destination: "Vadakanchery", viaVazhani: false },
+            { time: "06:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "06:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "07:05", destination: "Vadakanchery", viaVazhani: false },
+            { time: "07:15", destination: "Vadakanchery", viaVazhani: false },
+            { time: "07:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "07:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "07:35", destination: "Vadakanchery", viaVazhani: false },
+            { time: "07:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:15", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:25", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:35", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:45", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "09:05", destination: "Vadakanchery", viaVazhani: false },
+            { time: "09:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "09:25", destination: "Vadakanchery", viaVazhani: false },
+            { time: "09:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "09:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:05", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:25", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:35", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:45", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:55", destination: "Vadakanchery", viaVazhani: false },
+            { time: "11:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "11:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "11:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "11:55", destination: "Vadakanchery", viaVazhani: false },
+            { time: "12:05", destination: "Vadakanchery", viaVazhani: false },
+            { time: "12:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "12:35", destination: "Vadakanchery", viaVazhani: false },
+            { time: "12:55", destination: "Vadakanchery", viaVazhani: false },
+            { time: "13:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "13:25", destination: "Vadakanchery", viaVazhani: false },
+            { time: "13:35", destination: "Vadakanchery", viaVazhani: false },
+            { time: "13:55", destination: "Vadakanchery", viaVazhani: false },
+            { time: "14:05", destination: "Vadakanchery", viaVazhani: false },
+            { time: "14:15", destination: "Vadakanchery", viaVazhani: false },
+            { time: "14:25", destination: "Vadakanchery", viaVazhani: false },
+            { time: "14:35", destination: "Vadakanchery", viaVazhani: false },
+            { time: "14:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "15:05", destination: "Vadakanchery", viaVazhani: false },
+            { time: "15:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "15:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "15:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "15:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "16:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "16:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "16:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "16:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "16:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "16:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "17:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "17:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "17:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "17:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "17:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "17:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "18:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "18:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "18:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "18:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "18:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "18:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "19:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "19:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "19:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "19:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "19:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "19:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "20:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "20:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "20:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "20:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "20:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "20:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "21:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "21:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "21:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "21:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "21:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "21:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "22:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "22:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "22:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "22:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "22:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "22:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "23:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "23:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "23:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "23:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "23:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "23:50", destination: "Vadakanchery", viaVazhani: false }
+        ];
+
+
+        function getNextBusTime(currentTime, busTimes) {
+            for (const bus of busTimes) {
+                const busTime = new Date();
+                busTime.setHours(...bus.time.split(':'));
+                if (busTime > currentTime) {
+                    return bus;
+                }
+            }
+            return null;
+        }
+        function redirectToFullTimeTable() {
+            // Replace 'full-time-table.html' with the path to your full time table HTML page
+            window.location.href = 'full-time-table.html';
+        }
+
+        function updateSchedule() {
+            const currentTime = new Date();
+            const scheduleDiv = document.getElementById('schedule');
+            const nextBusDiv = document.getElementById('nextBus');
+
+            let nextBus = getNextBusTime(currentTime, busTimes);
+            let nextBusHTML = '';
+            let scheduleHTML = '';
+            
+            if (nextBus) {
+                const nextBusTime = new Date();
+                nextBusTime.setHours(...nextBus.time.split(':'));
+                const remainingMinutes = Math.floor((nextBusTime - currentTime) / (1000 * 60));
+
+                nextBusHTML = `
+                    <div class="remaining-time">${remainingMinutes} mins</div>
+                    <div class="bus">
+                        <div class="bus-time">${nextBus.time} vadakanchery</div>
+                    </div>
+                `;
+
+                nextBusIndex = busTimes.indexOf(nextBus);
+                const upcomingBuses = busTimes.slice(nextBusIndex, nextBusIndex + 4);
+
+                upcomingBuses.forEach(bus => {
+                    scheduleHTML += `
+                        <div class="bus${bus.viaVazhani ? ' via-vazhani' : ''}">
+                            <div class="bus-time">${bus.time}</div>
+                            <div class="destination">${bus.destination}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                nextBusHTML = '<div class="bus">No more buses today.</div>';
+            }
+
+            nextBusDiv.innerHTML = nextBusHTML;
+            scheduleDiv.innerHTML= scheduleHTML;
+        }
+
+        updateSchedule();
+        setInterval(updateSchedule, 60000);
+
+        // Function to handle viewing full timetable
+        document.getElementById('viewFullTimetable').addEventListener('click', function() {
+            window.location.href = './full-timetable.html'; // Replace './full-timetable.html' with the actual URL of your full timetable page
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* General Styles */
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            scroll-behavior: smooth;
+            margin: 20px 0; /* Added margin to the top of the body */
+            padding: 20px;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            opacity: 0.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Schedule Styles */
+        .table-container {
+            width: calc(33.33% - 20px); /* Adjust the width as needed */
+            margin: 10px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #6200ea;
+            color: #fff;
+        }
+
+        td {
+            background-color: #1e1e1e;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="table-container">
+            <table id="kechery-vadakanchery">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Destination</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows for Kechery to Vadakanchery route will be dynamically populated here using JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container">
+            <table id="wky-kcy">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Destination</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows for WKY to KCY route will be dynamically populated here using JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container">
+            <table id="kechery-thrissur">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Destination</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows for Kechery to Thrissur route will be dynamically populated here using JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const kecheryToVadakanchery = [
+        { time: "05:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "05:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "05:15", destination: "Vadakanchery", viaVazhani: false },
+            { time: "05:45", destination: "Vadakanchery", viaVazhani: false },
+            { time: "05:55", destination: "Vadakanchery", viaVazhani: true },
+            { time: "06:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "06:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "06:25", destination: "Vadakanchery", viaVazhani: false },
+            { time: "06:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "06:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "07:05", destination: "Vadakanchery", viaVazhani: false },
+            { time: "07:15", destination: "Vadakanchery", viaVazhani: false },
+            { time: "07:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "07:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "07:35", destination: "Vadakanchery", viaVazhani: false },
+            { time: "07:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:15", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:25", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:35", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:45", destination: "Vadakanchery", viaVazhani: false },
+            { time: "08:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "09:05", destination: "Vadakanchery", viaVazhani: false },
+            { time: "09:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "09:25", destination: "Vadakanchery", viaVazhani: false },
+            { time: "09:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "09:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:05", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:25", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:35", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:45", destination: "Vadakanchery", viaVazhani: false },
+            { time: "10:55", destination: "Vadakanchery", viaVazhani: false },
+            { time: "11:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "11:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "11:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "11:55", destination: "Vadakanchery", viaVazhani: false },
+            { time: "12:05", destination: "Vadakanchery", viaVazhani: false },
+            { time: "12:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "12:35", destination: "Vadakanchery", viaVazhani: false },
+            { time: "12:55", destination: "Vadakanchery", viaVazhani: false },
+            { time: "13:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "13:25", destination: "Vadakanchery", viaVazhani: false },
+            { time: "13:35", destination: "Vadakanchery", viaVazhani: false },
+            { time: "13:55", destination: "Vadakanchery", viaVazhani: false },
+            { time: "14:05", destination: "Vadakanchery", viaVazhani: false },
+            { time: "14:15", destination: "Vadakanchery", viaVazhani: false },
+            { time: "14:25", destination: "Vadakanchery", viaVazhani: false },
+            { time: "14:35", destination: "Vadakanchery", viaVazhani: false },
+            { time: "14:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "15:05", destination: "Vadakanchery", viaVazhani: false },
+            { time: "15:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "15:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "15:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "15:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "16:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "16:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "16:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "16:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "16:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "16:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "17:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "17:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "17:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "17:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "17:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "17:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "18:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "18:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "18:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "18:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "18:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "18:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "19:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "19:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "19:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "19:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "19:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "19:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "20:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "20:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "20:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "20:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "20:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "20:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "21:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "21:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "21:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "21:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "21:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "21:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "22:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "22:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "22:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "22:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "22:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "22:50", destination: "Vadakanchery", viaVazhani: false },
+            { time: "23:00", destination: "Vadakanchery", viaVazhani: false },
+            { time: "23:10", destination: "Vadakanchery", viaVazhani: false },
+            { time: "23:20", destination: "Vadakanchery", viaVazhani: false },
+            { time: "23:30", destination: "Vadakanchery", viaVazhani: false },
+            { time: "23:40", destination: "Vadakanchery", viaVazhani: false },
+            { time: "23:50", destination: "Vadakanchery", viaVazhani: false },
+        ];
+            // Add more entries here
+
+        const wkyToKcy = [
+        { time: "05:30", destination: "Kecheri, Puthuruthi" },
+            { time: "06:00", destination: "Kecheri, Parapur, Oorakam" },
+            { time: "06:05", destination: "Kecheri" },
+            { time: "06:15", destination: "Kecheri, Mattam, Pavaratty" },
+            { time: "06:25", destination: "Kecheri, Parapur, Pavaratty, Chavakkad" },
+            { time: "06:30", destination: "Kecheri, Mattam, Pavaratty" },
+            { time: "06:40", destination: "Kecheri, Mundur, Kottekkad, Thrissur" },
+            { time: "06:45", destination: "Kecheri, Alur, Pavaratty" },
+            { time: "06:45", destination: "Kecheri, Mundur, Kottekkad, Thrissur" },
+            { time: "06:55", destination: "Kecheri, Kunnamkulam" },
+            { time: "07:05", destination: "Kecheri" },
+            { time: "07:10", destination: "Kecheri" },
+            { time: "07:15", destination: "Kecheri, Kunnamkulam" },
+            { time: "07:20", destination: "Kecheri" },
+            { time: "07:25", destination: "Kecheri, Kaiparambu,Parapur" },
+            { time: "07:30", destination: "Kecheri, Guruvayur" },
+            { time: "07:35", destination: "Kecheri, Kaipuram" },
+            { time: "07:50", destination: "Kecheri" },
+            { time: "08:00", destination: "Kecheri" },
+            { time: "08:05", destination: "Kecheri" },
+{ time: "08:10", destination: "Kecheri, Matam, Pavaratty" },
+{ time: "08:20", destination: "Kecheri, Guruvayur" },
+{ time: "08:30", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "08:45", destination: "Kecheri, Kunnamkulam, Pavaratty" },
+{ time: "08:50", destination: "Kecheri, Alur, Parapur" },
+{ time: "09:05", destination: "Kecheri, Choondal, Pavaratty" },
+{ time: "09:20", destination: "Kecheri, Choondal, Pavaratty" },
+{ time: "09:30", destination: "Kecheri" },
+{ time: "09:35", destination: "Kecheri, Kaiparam, Parapur, Orakam" },
+{ time: "09:50", destination: "Kecheri, Matam, Pavaratty" },
+{ time: "09:55", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "10:05", destination: "Kecheri" },
+{ time: "10:10", destination: "Kecheri" },
+{ time: "10:25", destination: "Kecheri" },
+{ time: "10:35", destination: "Kecheri" },
+{ time: "10:40", destination: "Kecheri, Mundur, Kottekkad, Thrissur" },
+{ time: "10:45", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "10:55", destination: "Kecheri" },
+{ time: "11:10", destination: "Kecheri, Guruvayur" },
+{ time: "11:20", destination: "Kecheri" },
+{ time: "11:25", destination: "Kecheri, Matam, Pavaratty" },
+{ time: "11:30", destination: "Kecheri" },
+{ time: "11:35", destination: "Kecheri, Mattam, Pavarati, Enamavu" },
+{ time: "11:45", destination: "Kecheri, Kaiparambu, Parapur, Pavaratty" },
+{ time: "11:50", destination: "Kecheri" },
+{ time: "12:05", destination: "Kecheri" },
+{ time: "12:10", destination: "Kecheri" },
+{ time: "12:15", destination: "Kecheri" },
+{ time: "12:40", destination: "Kecheri, Matam, Pavaratty, Enamavu" },
+{ time: "13:00", destination: "Kecheri" },
+{ time: "13:10", destination: "Kecheri, Kaiparam, Parapur, Enammavu, (Toyakavu)" },
+{ time: "13:20", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "13:30", destination: "Kecheri" },
+{ time: "13:35", destination: "Kecheri, Kaiparambu, Parapur, Enamavu" },
+{ time: "13:45", destination: "Kecheri, Matam, Pavaratty" },
+{ time: "14:10", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "14:20", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "14:30", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "14:40", destination: "Kecheri, Matam, Pavaratty" },
+{ time: "14:50", destination: "Kecheri" },
+{ time: "15:05", destination: "Kecheri" },
+{ time: "15:20", destination: "Kecheri, Kaiparambu, Parapur, Pavaratty, Chavakkad" },
+{ time: "15:35", destination: "Kecheri" },
+{ time: "15:40", destination: "Kecheri, Guruvayur" },
+{ time: "15:50", destination: "Kecheri, Guruvayur" },
+{ time: "16:05", destination: "Kecheri" },
+{ time: "16:20", destination: "Kecheri, Mundur, Kottekkad, Thrissur" },
+{ time: "16:30", destination: "Kecheri, Kaiparambu, Ponnore, Parapur" },
+{ time: "16:45", destination: "Kecheri, Kunnamkulam, Guruvayur" },
+{ time: "16:50", destination: "Kecheri, Taiyoor" },
+{ time: "16:55", destination: "Kecheri, Guruvayur" },
+{ time: "17:05", destination: "Kiralur, Mundur, Thrissur" },
+{ time: "17:10", destination: "Kecheri, Mattam, Pavaratty, Enamavu" },
+{ time: "17:20", destination: "Kecheri, Ponnore, Parapur, Orakam" },
+{ time: "17:30", destination: "Kecheri, Ponnore, Parapur" },
+{ time: "17:45", destination: "Kiralur-Thrissur" },
+{ time: "17:50", destination: "Kecheri, Parapur, Ponnore, Vadakancherry" },
+{ time: "17:50", destination: "Kecheri, Guruvayur" },
+{ time: "18:00", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "18:15", destination: "Kecheri, Mundur, Kottekkad, Thrissur" }
+            // Add more entries here
+        ];
+
+        const kecheryToThrissur = [
+        { time: "05:45", destination: "Kiralur, Thrissur" },
+    { time: "06:40", destination: "Kiralur, Thrissur" },
+    { time: "06:40", destination: "Kecheri, Mundur, Kottekkad, Thrissur" },
+    { time: "07:25", destination: "Kiralur, Thrissur" },
+    { time: "07:45", destination: "Kiralur, Mundur, Thrissur" },
+    { time: "10:40", destination: "Kiralur, Thrissur" },
+    { time: "10:55", destination: "Kiralur, Thrissur" },
+    { time: "11:25", destination: "Kiralur, Thrissur, Arampilly" },
+    { time: "15:25", destination: "Kiralur, Thrissur" },
+    { time: "15:45", destination: "Arampilly, Thrissur" },
+    { time: "17:45", destination: "Kiralur-Thrissur" }
+            // Add more entries here
+        ];
+
+        function populateTimetable(routeData, tableId) {
+            const tableBody = document.querySelector(`#${tableId} tbody`);
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            routeData.forEach(data => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${data.time}</td>
+                    <td>${data.destination}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Call the function to populate each timetable on page load
+        window.onload = function() {
+            populateTimetable(kecheryToVadakanchery, 'kechery-vadakanchery');
+            populateTimetable(wkyToKcy, 'wky-kcy');
+            populateTimetable(kecheryToThrissur, 'kechery-thrissur');
+        };
+    </script>
+</body>
+</html>

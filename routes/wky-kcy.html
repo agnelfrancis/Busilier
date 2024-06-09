@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bussily - Vadakanchery to Kechery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap">
+    <link rel="icon" type="image/png" href="../images/icon.png">
+    <style>
+        /* Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* General Styles */
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            opacity: 0.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: #6200ea;
+            padding: 20px;
+        }
+
+        .navbar a {
+            margin: 0 20px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .navbar a:hover {
+            opacity: 0.7;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-top: 80px;
+            text-align: center;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #6200ea;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Schedule Styles */
+        .schedule {
+            width: 100%;
+            max-width: 500px;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .bus {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .bus:last-child {
+            border-bottom: none;
+        }
+
+        .bus.via-vazhani {
+            color: #ff9800;
+        }
+
+        .bus-time, .remaining-time, .destination {
+            font-size: 1rem;
+        }
+
+        .remaining-time {
+            font-weight: bold;
+        }
+
+        /* Next Bus Styles */
+        .next-bus {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #292929;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .next-bus .remaining-time {
+            font-size: 1.5rem;
+        }
+
+        .via-vazhani::after {
+            content: ' (via Vazhani)';
+        }
+
+        /* Media Queries */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .navbar {
+                padding: 10px;
+            }
+
+            .navbar a {
+                font-size: 16px;
+            }
+
+            .section {
+                margin-top: 60px;
+            }
+
+            h1 {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+
+            .latest-results-container {
+                margin-top: 40px;
+            }
+
+            .latest-result {
+                margin: 10px;
+            }
+
+            .latest-result h2 {
+                font-size: 20px;
+                margin-bottom: 5px;
+            }
+
+            .latest-result p {
+                font-size: 14px;
+            }
+
+            .button-container {
+                margin-top: 10px;
+            }
+
+            .button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+        .button {
+            background-color: #6200ea;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #4b0082;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>Bussily</h1>
+    <h2>Vadakanchery to Kechery</h2>
+    <div class="next-bus" id="nextBus">
+        <!-- Next arriving bus will be shown here -->
+    </div>
+    <div class="schedule" id="schedule">
+        <!-- Next four bus times will be dynamically inserted here -->
+    </div>
+    <button class="button" onclick="redirectToFullTimeTable()">View Full Time Table</button>
+
+    <script>
+        const busTimes = [
+            { time: "05:30", destination: "Kecheri, Puthuruthi" },
+            { time: "06:00", destination: "Kecheri, Parapur, Oorakam" },
+            { time: "06:05", destination: "Kecheri" },
+            { time: "06:15", destination: "Kecheri, Mattam, Pavaratty" },
+            { time: "06:25", destination: "Kecheri, Parapur, Pavaratty, Chavakkad" },
+            { time: "06:30", destination: "Kecheri, Mattam, Pavaratty" },
+            { time: "06:40", destination: "Kecheri, Mundur, Kottekkad, Thrissur" },
+            { time: "06:45", destination: "Kecheri, Alur, Pavaratty" },
+            { time: "06:45", destination: "Kecheri, Mundur, Kottekkad, Thrissur" },
+            { time: "06:55", destination: "Kecheri, Kunnamkulam" },
+            { time: "07:05", destination: "Kecheri" },
+            { time: "07:10", destination: "Kecheri" },
+            { time: "07:15", destination: "Kecheri, Kunnamkulam" },
+            { time: "07:20", destination: "Kecheri" },
+            { time: "07:25", destination: "Kecheri, Kaiparambu,Parapur" },
+            { time: "07:30", destination: "Kecheri, Guruvayur" },
+            { time: "07:35", destination: "Kecheri, Kaipuram" },
+            { time: "07:50", destination: "Kecheri" },
+            { time: "08:00", destination: "Kecheri" },
+            { time: "08:05", destination: "Kecheri" },
+{ time: "08:10", destination: "Kecheri, Matam, Pavaratty" },
+{ time: "08:20", destination: "Kecheri, Guruvayur" },
+{ time: "08:30", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "08:45", destination: "Kecheri, Kunnamkulam, Pavaratty" },
+{ time: "08:50", destination: "Kecheri, Alur, Parapur" },
+{ time: "09:05", destination: "Kecheri, Choondal, Pavaratty" },
+{ time: "09:20", destination: "Kecheri, Choondal, Pavaratty" },
+{ time: "09:30", destination: "Kecheri" },
+{ time: "09:35", destination: "Kecheri, Kaiparam, Parapur, Orakam" },
+{ time: "09:50", destination: "Kecheri, Matam, Pavaratty" },
+{ time: "09:55", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "10:05", destination: "Kecheri" },
+{ time: "10:10", destination: "Kecheri" },
+{ time: "10:25", destination: "Kecheri" },
+{ time: "10:35", destination: "Kecheri" },
+{ time: "10:40", destination: "Kecheri, Mundur, Kottekkad, Thrissur" },
+{ time: "10:45", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "10:55", destination: "Kecheri" },
+{ time: "11:10", destination: "Kecheri, Guruvayur" },
+{ time: "11:20", destination: "Kecheri" },
+{ time: "11:25", destination: "Kecheri, Matam, Pavaratty" },
+{ time: "11:30", destination: "Kecheri" },
+{ time: "11:35", destination: "Kecheri, Mattam, Pavarati, Enamavu" },
+{ time: "11:45", destination: "Kecheri, Kaiparambu, Parapur, Pavaratty" },
+{ time: "11:50", destination: "Kecheri" },
+{ time: "12:05", destination: "Kecheri" },
+{ time: "12:10", destination: "Kecheri" },
+{ time: "12:15", destination: "Kecheri" },
+{ time: "12:40", destination: "Kecheri, Matam, Pavaratty, Enamavu" },
+{ time: "13:00", destination: "Kecheri" },
+{ time: "13:10", destination: "Kecheri, Kaiparam, Parapur, Enammavu, (Toyakavu)" },
+{ time: "13:20", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "13:30", destination: "Kecheri" },
+{ time: "13:35", destination: "Kecheri, Kaiparambu, Parapur, Enamavu" },
+{ time: "13:45", destination: "Kecheri, Matam, Pavaratty" },
+{ time: "14:10", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "14:20", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "14:30", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "14:40", destination: "Kecheri, Matam, Pavaratty" },
+{ time: "14:50", destination: "Kecheri" },
+{ time: "15:05", destination: "Kecheri" },
+{ time: "15:20", destination: "Kecheri, Kaiparambu, Parapur, Pavaratty, Chavakkad" },
+{ time: "15:35", destination: "Kecheri" },
+{ time: "15:40", destination: "Kecheri, Guruvayur" },
+{ time: "15:50", destination: "Kecheri, Guruvayur" },
+{ time: "16:05", destination: "Kecheri" },
+{ time: "16:20", destination: "Kecheri, Mundur, Kottekkad, Thrissur" },
+{ time: "16:30", destination: "Kecheri, Kaiparambu, Ponnore, Parapur" },
+{ time: "16:45", destination: "Kecheri, Kunnamkulam, Guruvayur" },
+{ time: "16:50", destination: "Kecheri, Taiyoor" },
+{ time: "16:55", destination: "Kecheri, Guruvayur" },
+{ time: "17:05", destination: "Kiralur, Mundur, Thrissur" },
+{ time: "17:10", destination: "Kecheri, Mattam, Pavaratty, Enamavu" },
+{ time: "17:20", destination: "Kecheri, Ponnore, Parapur, Orakam" },
+{ time: "17:30", destination: "Kecheri, Ponnore, Parapur" },
+{ time: "17:45", destination: "Kiralur-Thrissur" },
+{ time: "17:50", destination: "Kecheri, Parapur, Ponnore, Vadakancherry" },
+{ time: "17:50", destination: "Kecheri, Guruvayur" },
+{ time: "18:00", destination: "Kecheri, Alur, Pavaratty" },
+{ time: "18:15", destination: "Kecheri, Mundur, Kottekkad, Thrissur" }
+];
+function getNextBusTime(currentTime, busTimes) {
+        for (const bus of busTimes) {
+            const busTime = new Date();
+            busTime.setHours(...bus.time.split(':'));
+            if (busTime > currentTime) {
+                return bus;
+            }
+        }
+        return null;
+    }
+    function redirectToFullTimeTable() {
+            // Replace 'full-time-table.html' with the path to your full time table HTML page
+            window.location.href = 'full-time-table.html';
+        }
+
+    function updateSchedule() {
+        const currentTime = new Date();
+        const scheduleDiv = document.getElementById('schedule');
+        const nextBusDiv = document.getElementById('nextBus');
+
+        let nextBus = getNextBusTime(currentTime, busTimes);
+        let nextBusHTML = '';
+        let scheduleHTML = '';
+        
+        if (nextBus) {
+            const nextBusTime = new Date();
+            nextBusTime.setHours(...nextBus.time.split(':'));
+            const remainingMinutes = Math.floor((nextBusTime - currentTime) / (1000 * 60));
+
+            nextBusHTML = `
+                <div class="remaining-time">${remainingMinutes} mins</div>
+                <div class="bus">
+                    <div class="bus-time">${nextBus.time} Vadakanchery</div>
+                </div>
+            `;
+
+            nextBusIndex = busTimes.indexOf(nextBus);
+            const upcomingBuses = busTimes.slice(nextBusIndex, nextBusIndex + 4);
+
+            upcomingBuses.forEach(bus => {
+                scheduleHTML += `
+                    <div class="bus${bus.viaVazhani ? ' via-vazhani' : ''}">
+                        <div class="bus-time">${bus.time}</div>
+                        <div class="destination">${bus.destination}</div>
+                    </div>
+                `;
+            });
+        } else {
+            nextBusHTML = '<div class="bus">No more buses today.</div>';
+        }
+
+        nextBusDiv.innerHTML = nextBusHTML;
+        scheduleDiv.innerHTML = scheduleHTML;
+    }
+
+    updateSchedule();
+    setInterval(updateSchedule, 60000);
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
