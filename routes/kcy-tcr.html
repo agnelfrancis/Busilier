@@ -220,6 +220,7 @@
             }
             return null;
         }
+
         function redirectToFullTimeTable() {
             // Replace 'full-time-table.html' with the path to your full time table HTML page
             window.location.href = 'full-time-table.html';
@@ -230,47 +231,54 @@
             const currentTime = new Date();
             const scheduleDiv = document.getElementById('schedule');
             const nextBusDiv = document.getElementById('nextBus');
+            const dayOfWeek = currentTime.getDay(); // Get the current day of the week (0 for Sunday, 6 for Saturday)
 
-            let nextBus = getNextBusTime(currentTime, busTimes);
             let nextBusHTML = '';
             let scheduleHTML = '';
 
-            if (nextBus) {
-                const nextBusTime = new Date();
-                nextBusTime.setHours(...nextBus.time.split(':'));
-                const remainingMinutes = Math.floor((nextBusTime - currentTime) / (1000 * 60));
-
+            if (dayOfWeek === 0) {
+                // If today is Sunday, show the no service message
                 nextBusHTML = `
-                    <div class="remaining-time">${remainingMinutes} mins</div>
-                    <div class="bus">
-                        <div class="bus-time">${nextBus.time} Kechery</div>
-                    </div>
+                    <div class="bus">Buses towards Thrissur are not in service today. Please go through Kechery or Kuranchery to go towards Thrissur.</div>
                 `;
+            } else {
+                let nextBus = getNextBusTime(currentTime, busTimes);
+                if (nextBus) {
+                    const nextBusTime = new Date();
+                    nextBusTime.setHours(...nextBus.time.split(':'));
+                    const remainingMinutes = Math.floor((nextBusTime - currentTime) / (1000 * 60));
 
-                nextBusIndex = busTimes.indexOf(nextBus);
-                const upcomingBuses = busTimes.slice(nextBusIndex, nextBusIndex + 4);
-
-                upcomingBuses.forEach(bus => {
-                    scheduleHTML += `
+                    nextBusHTML = `
+                        <div class="remaining-time">${remainingMinutes} mins</div>
                         <div class="bus">
+                            <div class="bus-time">${nextBus.time}</div>
+                            <div class="destination">${nextBus.destination}</div>
+                        </div>
+                    `;
+
+                    const nextBusIndex = busTimes.indexOf(nextBus);
+                    const upcomingBuses = busTimes.slice(nextBusIndex, nextBusIndex + 4);
+
+                    scheduleHTML = upcomingBuses.map(bus => `
+                        <div class="bus ${bus.destination.toLowerCase().includes('vazhani') ? 'via-vazhani' : ''}">
                             <div class="bus-time">${bus.time}</div>
                             <div class="destination">${bus.destination}</div>
                         </div>
+                    `).join('');
+                } else {
+                    nextBusHTML = `
+                        <div class="bus">No more buses for today. Please check the full time table.</div>
                     `;
-                });
-            } else {
-                nextBusHTML = '<div class="bus">No more buses today.</div>';
+                }
             }
 
             nextBusDiv.innerHTML = nextBusHTML;
             scheduleDiv.innerHTML = scheduleHTML;
-       
         }
 
-// Update the schedule initially
-updateSchedule();
-// Set interval to update the schedule every minute
-setInterval(updateSchedule, 60000);
-</script>
+        // Call the updateSchedule function on page load and every minute
+        updateSchedule();
+        setInterval(updateSchedule, 60000);
+    </script>
 </body>
 </html>
