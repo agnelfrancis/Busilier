@@ -19,7 +19,7 @@
             background-color: #121212;
             color: #fff;
             scroll-behavior: smooth;
-            margin: 20px 0; /* Added margin to the top of the body */
+            margin: 20px 0;
             padding: 20px;
         }
 
@@ -40,9 +40,10 @@
             justify-content: center;
         }
 
-        /* Schedule Styles */
+        /* Table Styles */
         .table-container {
-            width: calc(33.33% - 20px); /* Adjust the width as needed */
+            width: 100%;
+            max-width: 600px; /* Adjust as needed */
             margin: 10px;
             overflow-x: auto;
         }
@@ -115,6 +116,7 @@
         </div>
     </div>
     <script>
+        // Sample data for dynamic population
         const kecheryToVadakanchery = [
     { time: "06:15", destination: "Vadakanchery", viaVazhani: false },
     { time: "06:50", destination: "Vadakancherry", viaVazhani: false },
@@ -293,21 +295,22 @@
         ];
 
         function populateTable(tableId, data) {
-            const tableBody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-            data.forEach(entry => {
-                const row = document.createElement('tr');
-                const timeCell = document.createElement('td');
-                const destinationCell = document.createElement('td');
-
-                timeCell.textContent = entry.time;
-                destinationCell.textContent = entry.destination;
-
-                row.appendChild(timeCell);
-                row.appendChild(destinationCell);
-                tableBody.appendChild(row);
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = ''; // Clear existing rows
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                const timeTd = document.createElement('td');
+                timeTd.textContent = row.time;
+                const destinationTd = document.createElement('td');
+                destinationTd.textContent = row.destination;
+                tr.appendChild(timeTd);
+                tr.appendChild(destinationTd);
+                tbody.appendChild(tr);
             });
         }
 
+        // Populate tables with data
         populateTable('kechery-vadakanchery', kecheryToVadakanchery);
         populateTable('wky-kcy', wkyToKcy);
         populateTable('kechery-thrissur', kecheryToThrissur);
