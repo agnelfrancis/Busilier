@@ -292,26 +292,25 @@
     { time: "17:05", destination: "Kiralur, Mundur, Thrissur" }
         ];
 
-        function populateTimetable(routeData, tableId) {
-            const tableBody = document.querySelector(`#${tableId} tbody`);
-            tableBody.innerHTML = ''; // Clear existing rows
-
-            routeData.forEach(data => {
+        function populateTable(tableId, data) {
+            const tableBody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+            data.forEach(entry => {
                 const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${data.time}</td>
-                    <td>${data.destination}</td>
-                `;
+                const timeCell = document.createElement('td');
+                const destinationCell = document.createElement('td');
+
+                timeCell.textContent = entry.time;
+                destinationCell.textContent = entry.destination;
+
+                row.appendChild(timeCell);
+                row.appendChild(destinationCell);
                 tableBody.appendChild(row);
             });
         }
 
-        // Call the function to populate each timetable on page load
-        window.onload = function() {
-            populateTimetable(kecheryToVadakanchery, 'kechery-vadakanchery');
-            populateTimetable(wkyToKcy, 'wky-kcy');
-            populateTimetable(kecheryToThrissur, 'kechery-thrissur');
-        };
+        populateTable('kechery-vadakanchery', kecheryToVadakanchery);
+        populateTable('wky-kcy', wkyToKcy);
+        populateTable('kechery-thrissur', kecheryToThrissur);
     </script>
 </body>
 </html>
